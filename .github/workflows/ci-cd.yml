@@ -41,10 +41,15 @@ jobs:
         with:
           fetch-depth: 0  # Garantir que o repositório completo seja verificado
 
+      - name: Set up Heroku
+        run: |
+          echo "machine api.heroku.com login ${{ secrets.HEROKU_EMAIL }} password ${{ secrets.HEROKU_API_KEY }}" > ~/.netrc
+          echo "machine git.heroku.com login ${{ secrets.HEROKU_EMAIL }} password ${{ secrets.HEROKU_API_KEY }}" >> ~/.netrc
+          heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
+
       - name: Deploy to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: financial-event-notification
         run: |
-          git remote add heroku https://git.heroku.com/${{ env.HEROKU_APP_NAME }}.git
           git push heroku HEAD:master
