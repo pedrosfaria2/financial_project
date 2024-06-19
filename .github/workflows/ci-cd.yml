@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Garantir que o repositório completo seja verificado
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -36,10 +38,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Garantir que o repositório completo seja verificado
 
       - name: Deploy to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: financial-event-notification
         run: |
-          git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:master
+          git remote add heroku https://git.heroku.com/${{ env.HEROKU_APP_NAME }}.git
+          git fetch --unshallow  # Adiciona este comando
+          git push heroku HEAD:master
