@@ -47,5 +47,4 @@ jobs:
           HEROKU_APP_NAME: financial-event-notification
         run: |
           git remote add heroku https://git.heroku.com/${{ env.HEROKU_APP_NAME }}.git
-          git fetch --unshallow  # Adiciona este comando
           git push heroku HEAD:master
